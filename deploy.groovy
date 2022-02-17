@@ -1,3 +1,5 @@
+def utils
+
 pipeline {
   agent any
 
@@ -8,17 +10,17 @@ pipeline {
   parameters {
     choice choices: ['stage', 'promote', 'stage_and_promote', 'deploy_prod'], description: 'build mode', name: 'mode'
     extendedChoice(description: 'repositories to release', multiSelectDelimiter: ',', name: 'repos',
-                    quoteValue: false, saveJSONParameterToFile: false, type: 'PT_MULTI_SELECT', visibleItemCount: 11,
+                    quoteValue: false, saveJSONParameterToFile: false, type: 'PT_MULTI_SELECT', visibleItemCount: 5,
                     value: 'udm,util,onboarding,admin,contracts,deliveries,integration,overview,settlements,approuter,ui')
     string defaultValue: '1.0.0', description: 'version to release', name: 'version'
   }
 
   stages {
-    stage('build') {
+    stage('Init') {
       steps {
-        echo "${params.mode}"
-        echo "${params.repos}"
-        echo "${params.version}"
+        script {
+          utils = load 'utils.groovy'
+        }
       }
     }
   }
